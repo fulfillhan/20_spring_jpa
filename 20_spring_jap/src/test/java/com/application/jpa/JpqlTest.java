@@ -89,11 +89,11 @@ public class JpqlTest {
 	}
 
 	// 6) subquery 예시
-	@Test
-	public void subqueryEx() {
-		for (Product product : jpqlRepository.subqueryEx()) {
-			System.out.println(product);
-		}
+		@Test
+		public void subqueryEx() {
+			for (Product product : jpqlRepository.subqueryEx()) {
+				System.out.println(product);
+			}
 	}
 
 }

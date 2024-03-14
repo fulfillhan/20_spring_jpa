@@ -37,7 +37,7 @@ public interface JpqlRepository  extends JpaRepository<Product, Long> {
 	 
 	 - JPQL은 SQL과 유사하지만 데이터베이스 테이블 대신 엔티티 객체 모델을 대상으로 쿼리를 작성한다.
 	 
-	 - Keyword는 대소문자를 구분하지만 엔티티 및 속성은 대소문자를 구분한다.
+	 - Keyword는 대소문자를 크게 구분하지만 엔티티 및 속성은 대소문자를 구분한다.
 	 
 	 - 엔티티 이름에는 ALIAS를 지정하여 사용한다.
 	 
@@ -111,7 +111,7 @@ public interface JpqlRepository  extends JpaRepository<Product, Long> {
 			""")
 	public List<Product> joinEx(@Param("activeYn")String activeYn);
 
-// 6) subquery 예시 상품가격보다 높은 가격
+// 6) subquery 예시 상품평균가격보다 높은 가격 select
 	@Query(value="""
 			select p
 			from Product p
