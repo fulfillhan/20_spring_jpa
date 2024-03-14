@@ -1,4 +1,4 @@
-// (추가)
+// (추가) QueryDSL의 버전을 "5.0.0"으로 설정하는 사용자 정의 속성 
 buildscript {
 	ext {
 		queryDslVersion = "5.0.0"
@@ -10,7 +10,7 @@ plugins {
 	id 'org.springframework.boot' version '3.2.3'
 	id 'io.spring.dependency-management' version '1.1.4'
 	
-	//(추가)
+	//(추가) queryDSL 소스코드 생성을 위한 Gradle 플러그인 , Q-타입 소스 코드를 과정을 자동화해주는 역할
 	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
 
@@ -38,6 +38,13 @@ dependencies {
 		//modelMapper
 	implementation 'org.modelmapper:modelmapper:2.4.4'
 	
+	/*
+		(추가)
+		QueryDSL을 사용하여 데이터베이스 및 메모리 내 컬렉션에 대한 타입 세이프 쿼리를 작성할 수 있게 된다. 
+		querydsl-core는 기본 기능을 제공하며 querydsl-collections는 메모리 내 컬렉션에 대한 쿼리 지원을 추가한다.
+		그리고 querydsl-jpa:jakarta는 JPA를 사용하는 애플리케이션에서 QueryDSL을 활용할 수 있게 해준다.
+	*/
+	
 	//(추가)
 	implementation "com.querydsl:querydsl-core:5.0.0"
 	implementation "com.querydsl:querydsl-collections"
@@ -47,15 +54,21 @@ dependencies {
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
-	
-	//(추가)
+	/* 
+		(추가)
+		QueryDSL과 Jakarta Persistence를 사용하는 프로젝트에서 필요한 코드 생성과 어노테이션 처리가 컴파일 시점에 자동으로 이루어지도록 할 수 있다.
+	*/
 	annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
 	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
 	annotationProcessor "jakarta.persistence:jakarta.persistence-api:3.1.0"
 	
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	
-	//(추가)
+	/*
+		(추가)
+		테스트 코드에서 필요한 모든 기능을 사용할 수 있게 된다. 
+		이 종속성들은 오직 테스트 컴파일과 실행 시에만 사용되며 메인 애플리케이션의 빌드나 실행에는 포함되지 않는다. 
+	*/
 	testImplementation 'jakarta.persistence:jakarta.persistence-api'
 	testImplementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
 }
@@ -64,22 +77,30 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
-// (추가)
-def querydslDir = "src/main/generated/querydsl"
+// (아래의 설정 모두 추가)
+def querydslDir = "src/main/generated/querydsl" //   Q-타입 소스 코드가 생성될 디렉토리의 경로를 지정
 
+/*
+	QueryDSL 설정을 진행 
+	jpa = true는 JPA 엔티티를 위한 Q-타입 소스 코드 생성을 활성화
+	querydslSourcesDir에 앞서 정의한 querydslDir 변수를 할당하여 생성된 Q-타입 소스 코드가 저장될 디렉토리를 지정
+*/
 querydsl {
 	jpa = true
 	querydslSourcesDir = querydslDir
 }
 
+// Gradle이 디렉토리를 자바 소스 코드의 일부로 인식하도록 설정
 sourceSets {
 	main.java.srcDir querydslDir
 }
 
+// QueryDSL 관련 코드를 컴파일할 때 사용되는 설정
 compileQuerydsl{
 	options.annotationProcessorPath = configurations.querydsl
 }
 
+// 프로젝트의 종속성 설정을 변경한다.
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
