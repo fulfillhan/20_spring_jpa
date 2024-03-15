@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.data.repository.query.Param;
 
 import com.application.jpa.entity.Product;
+
+//import jakarta.persistence.Tuple;
 import com.querydsl.core.Tuple;
 
 /*
